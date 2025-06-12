@@ -1,0 +1,9 @@
+output/*
+data/csvoutputs/*
+data/migrationWork/*
+*test*
+.env
+meta.json
+dashboard*.json
+category.md
+__pycache__

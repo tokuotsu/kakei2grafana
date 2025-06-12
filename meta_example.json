@@ -1,0 +1,13 @@
+{
+    "card_settings":{
+        "card_name": {
+            "closing_day": 15,
+            "payment_offset_months": 1,
+            "payment_day": 10,
+            "withdrawal_account": "bank_name"
+        }
+    },
+    "accounts_ja_en":{
+        "財布":"wallet"
+    }
+}

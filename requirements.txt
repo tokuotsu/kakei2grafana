@@ -1,0 +1,6 @@
+Flask
+numpy
+pandas
+psycopg2-binary
+python-dotenv
+requests
