@@ -2,6 +2,7 @@ import csv
 import pandas as pd
 import psycopg2
 from psycopg2 import sql
+import pytz
 
 def insert_csv_to_postgres(db_config, csv_file_path):
     # 接続を確立
@@ -35,6 +36,13 @@ def insert_csv_to_postgres(db_config, csv_file_path):
 
     # CSVをDataFrameで読み込む
     df = pd.read_csv(csv_file_path, encoding='utf-8')
+
+    # 日付列を datetime に強制変換（formatが合ってる場合）
+    df['日付'] = pd.to_datetime(df['日付'], errors='coerce')
+
+    # JST → UTC に変換
+    jst = pytz.timezone('Asia/Tokyo')
+    df['日付'] = df['日付'].apply(lambda d: jst.localize(d).astimezone(pytz.utc) if pd.isna(d.tzinfo) else d.astimezone(pytz.utc))
 
     # 金額を整数に変換（エラー処理付き）
     df['金額'] = pd.to_numeric(df['金額'], errors='coerce').fillna(0).astype(int)
