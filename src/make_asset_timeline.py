@@ -16,20 +16,20 @@ def generate_final_balance_df(
     data2 = pd.concat([transfer_df, record_df], axis=0)
 
     # --- タイムゾーン処理 ---
-    jst = pd.Timestamp.now(tz='Asia/Tokyo').tz
     data1['日付'] = pd.to_datetime(data1['日付']).dt.tz_localize(
         'Asia/Tokyo', ambiguous='NaT', nonexistent='shift_forward'
-    ).dt.normalize()
+    ).dt.tz_convert('UTC').dt.normalize()
+
     data2['withdrawal_date'] = pd.to_datetime(
         data2['withdrawal_date'], format='mixed', errors='coerce'
-    ).dt.tz_localize('Asia/Tokyo', ambiguous='NaT', nonexistent='shift_forward').dt.normalize()
+    ).dt.tz_localize('Asia/Tokyo', ambiguous='NaT', nonexistent='shift_forward').dt.tz_convert('UTC').dt.normalize()
 
     # --- 日付範囲 ---
     min_date = min(data1['日付'].min(), data2['withdrawal_date'].min())
     max_date = max(data1['日付'].max(), data2['withdrawal_date'].max())
-    date_range = pd.date_range(start=min_date, end=max_date, freq='D', tz='Asia/Tokyo')
+    date_range = pd.date_range(start=min_date, end=max_date, freq='D', tz='UTC')
     final_df = pd.DataFrame({'date': date_range})
-
+    
     # --- アカウント読み込み ---
     with open(meta_json_path, "r") as f:
         accounts = json.load(f)["accounts_ja_en"]
