@@ -2,13 +2,27 @@ import pandas as pd
 import psycopg2
 import psycopg2.extras
 import json
+from typing import Any
 
 def insert_final_balance_to_db(
-    db_config,
-    csv_file_path,
-    meta_json_path,
-    table_name,
-):
+        db_config: dict[str, Any],
+        csv_file_path: str,
+        meta_json_path: str,
+        table_name: str,
+    ) -> None:
+    """
+    最終残高データをPostgreSQLに高速インサートする関数
+    この関数は、指定されたCSVファイルから最終残高データを読み込み、PostgreSQLデータベースに高速でインサートします。
+    テーブルが存在しない場合は新規作成し、既存のテーブルは削除してから作成します。
+    Args:
+        db_config (dict): データベース接続情報
+        csv_file_path (str): 最終残高データのCSVファイルパス
+        meta_json_path (str): meta.jsonのパス
+        table_name (str): 挿入先のテーブル名
+        
+    Returns:
+        None
+    """
     # PostgreSQL接続
     conn = psycopg2.connect(**db_config)
     cur = conn.cursor()
@@ -60,9 +74,4 @@ def insert_final_balance_to_db(
     print("✅ 高速インサート完了！")
     
 if __name__ == '__main__':
-    insert_final_balance_to_db(
-        db_config=db_config,
-        csv_file_path='../output/final_balance.csv',
-        meta_json_path='../meta.json',
-        table_name='kakeibo_2',
-    )
+    pass

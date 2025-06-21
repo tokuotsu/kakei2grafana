@@ -1,11 +1,14 @@
 import json
 import pandas as pd
-if __name__ == "__main__":
-    from insert_csv2db import add_credit_withdrawal_info
-else:
-    from .insert_csv2db import add_credit_withdrawal_info
+from typing import Any, Callable
 
-def transform_transfer_data(transfer_df):
+if __name__ == "__main__":
+    from add_card_info import add_credit_withdrawal_info
+else:
+    from .add_card_info import add_credit_withdrawal_info
+
+
+def transform_transfer_data(transfer_df: pd.DataFrame) -> pd.DataFrame:
     """
     振替データを収支に変換する
     
@@ -60,11 +63,11 @@ def transform_transfer_data(transfer_df):
 
 
 def process_transfer_csv(
-    transfer_csv_file_path, 
-    card_settings_file_path, 
-    output_file_path, 
-    add_credit_info_func=add_credit_withdrawal_info
-):
+        transfer_csv_file_path: str, 
+        card_settings_file_path: str, 
+        output_file_path: str, 
+        add_credit_info_func: Callable[[pd.DataFrame, dict[str, Any]], pd.DataFrame]=add_credit_withdrawal_info
+    ) -> None:
     """
     振替CSVデータを収支データに変換し、クレジットカードの情報を追加して保存
     
@@ -93,7 +96,7 @@ def process_transfer_csv(
     print("✅ 振替データの変換と保存が完了しました。")
 
 if __name__ == "__main__":
-    from insert_csv2db import add_credit_withdrawal_info
+    from add_card_info import add_credit_withdrawal_info
     import json
     transfer_csv_file_path = '../data/csvoutputs/transfer.csv'
     card_settings_file = '../meta.json'

@@ -3,12 +3,26 @@ import numpy as np
 import json
 
 def generate_final_balance_df(
-    balance_csv_path,
-    transfer_csv_path,
-    record_csv_path,
-    meta_json_path,
-    output_csv_path=None
-):
+        balance_csv_path: str,
+        transfer_csv_path: str,
+        record_csv_path: str,
+        meta_json_path: str,
+        output_csv_path: str | None = None
+    ) -> pd.DataFrame:
+    """
+    最終残高データを生成する関数
+    この関数は、指定されたCSVファイルから残高と収支データを読み込み、アカウントごとの日別残高と収支を計算し、最終的なデータフレームを生成します。
+
+    Args:
+        balance_csv_path (str): 残高データのCSVファイルパス
+        transfer_csv_path (str): 振替データのCSVファイルパス
+        record_csv_path (str): 収支データのCSVファイルパス
+        meta_json_path (str): メタデータJSONファイルのパス
+        output_csv_path (str | None, optional): 出力CSVファイルのパス。指定しない場合は出力しません。
+
+    Returns:
+        pd.DataFrame: 最終残高データを含むデータフレーム
+    """
     # --- データ読み込み ---
     data1 = pd.read_csv(balance_csv_path, parse_dates=["日付"])
     transfer_df = pd.read_csv(transfer_csv_path, parse_dates=["withdrawal_date"])
@@ -94,6 +108,10 @@ def generate_final_balance_df(
     
 if __name__ == "__main__":
     final_balance_df = generate_final_balance_df(
+        balance_csv_path="../data/csvoutputs/balance.csv",
+        transfer_csv_path='../output/transfer.csv',
+        record_csv_path="../output/record.csv",
+        meta_json_path='../meta.json',
         output_csv_path="../output/final_balance.csv"
     )
     print("✅ 最終残高データの生成が完了しました。")
